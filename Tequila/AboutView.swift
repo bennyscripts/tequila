@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  AboutView.swift
 //  Tequila
 //
 //  Created by Ben Tettmar on 30/11/2024.
@@ -7,39 +7,37 @@
 
 import SwiftUI
 
-struct ContentView: View {
-    @EnvironmentObject var gamesList: Games
-    
+struct AboutView: View {
     var body: some View {
-        NavigationView {
-            List {
-                NavigationLink(destination: AllGamesListView().environmentObject(gamesList)) {
-                    Text("Library")
-                }
-                NavigationLink(destination: AllGamesListView().environmentObject(gamesList)) {
-                    Text("All Games")
-                }
-//                NavigationLink(destination: HomeView()) {
-//                    Text("Good")
-//                }
-//                NavigationLink(destination: HomeView()) {
-//                    Text("Unplayable")
-//                }
+        VStack(alignment: .leading) {
+            HStack {
+                Spacer()
             }
-            .padding(.top, 20)
-            .listStyle(.sidebar)
             
-            AllGamesListView()
-                .environmentObject(gamesList)
+            Text("Tequila")
+                .font(.title)
+            Text("The better way to see how well your games run on Apple Silicon")
+                .font(.subheadline)
+            Text("© 2024 Ben Tettmar")
+                .font(.subheadline)
+                .padding(.bottom, 5)
+            Text("Dependencies:")
+                .font(.headline)
+            Text("SwiftSoup")
+                .font(.subheadline)
+            Text("GiantBomb API")
+                .font(.subheadline)
+            Text("AppleGamingWiki")
+                .font(.subheadline)
+            
+            Spacer()
         }
-        .toolbar {
-            ToolbarItem(placement: .navigation) {
-                Button(action: {
-                    NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
-                }) {
-                    Image(systemName: "sidebar.left")
-                }
-            }
-        }
+        .padding()
+    }
+}
+
+struct AboutView_Previews: PreviewProvider {
+    static var previews: some View {
+        AboutView()
     }
 }

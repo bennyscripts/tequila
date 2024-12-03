@@ -34,12 +34,16 @@ struct GameCardView: View {
                 .foregroundColor(.secondary)
                 .padding(.trailing, 10)
             Button(action: {
-                favourite.toggle()
-                
-                if favourite && !model.favourites.contains(game) {
-                    model.favourites.add(game)
-                } else if !favourite && model.favourites.contains(game) {
-                    model.favourites.remove(game)
+                if model.favourites.hitLimit() {
+                    print("hit limit")
+                } else {
+                    favourite.toggle()
+                    
+                    if favourite && !model.favourites.contains(game) {
+                        model.favourites.add(game)
+                    } else if !favourite && model.favourites.contains(game) {
+                        model.favourites.remove(game)
+                    }
                 }
             }) {
                 Image(systemName: favourite ? "star.fill" : "star")
@@ -68,27 +72,43 @@ struct GameCardView: View {
     }
 }
 
-struct AllGamesListView: View {
+struct GamesListView: View {
     @ObservedObject var model: ViewModel
+    @EnvironmentObject var gamesList: Games
+    @EnvironmentObject var favourites: Favourites
+    
     @State private var searchText = ""
     @State private var sortOrder = [KeyPathComparator(\Game.title)]
     
+    func filterGames() -> [Game] {
+        if searchText.isEmpty {
+            return gamesList.games
+        }
+        
+        return gamesList.games.filter { game in
+            game.title.localizedCaseInsensitiveContains(searchText) || game.aliases.contains(where: { alias in
+                alias.localizedCaseInsensitiveContains(searchText)
+            })
+        }
+    }
+    
     var body: some View {
-        NavigationStack {
-            if model.gamesList.games.isEmpty {
-                ProgressView()
-            }
-            
-            List {
-                ForEach(model.gamesList.games.filter{searchText.isEmpty ? true : $0.title.localizedCaseInsensitiveContains(searchText)}) { game in
-                    NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
-                        GameCardView(model:model)
-                            .environmentObject(game)
+        if model.gamesList.games.isEmpty {
+            ProgressView()
+        } else {
+            NavigationStack {
+                List {
+                    ForEach(filterGames()) { game in
+                        NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
+                            GameCardView(model:model)
+                                .environmentObject(game)
+                        }
                     }
                 }
+                .searchable(text: $searchText)
+                .listStyle(.inset)
             }
-            .searchable(text: $searchText)
+            .navigationTitle("Tequila")
         }
-        .navigationTitle("Tequila")
     }
 }

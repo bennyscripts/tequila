@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B219F01F2CFC823900D727DE /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B219F01E2CFC823900D727DE /* Config.xcconfig */; };
+		B219F0212CFC828500D727DE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = B219F0202CFC828000D727DE /* .gitignore */; };
+		B219F0262CFCA2A300D727DE /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = B219F0252CFCA2A300D727DE /* SwiftSoup */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		B219EFD92CFB7CF100D727DE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,11 +33,26 @@
 		B219EFC72CFB7CEE00D727DE /* Tequila.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tequila.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B219EFD82CFB7CF100D727DE /* TequilaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TequilaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B219EFE22CFB7CF100D727DE /* TequilaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TequilaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B219F01E2CFC823900D727DE /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		B219F0202CFC828000D727DE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B219F0232CFC831400D727DE /* Exceptions for "Tequila" folder in "Tequila" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B219EFC62CFB7CEE00D727DE /* Tequila */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B219EFC92CFB7CEE00D727DE /* Tequila */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B219F0232CFC831400D727DE /* Exceptions for "Tequila" folder in "Tequila" target */,
+			);
 			path = Tequila;
 			sourceTree = "<group>";
 		};
@@ -52,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B219F0262CFCA2A300D727DE /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,9 +97,12 @@
 		B219EFBE2CFB7CEE00D727DE = {
 			isa = PBXGroup;
 			children = (
+				B219F0202CFC828000D727DE /* .gitignore */,
+				B219F01E2CFC823900D727DE /* Config.xcconfig */,
 				B219EFC92CFB7CEE00D727DE /* Tequila */,
 				B219EFDB2CFB7CF100D727DE /* TequilaTests */,
 				B219EFE52CFB7CF100D727DE /* TequilaUITests */,
+				B219F00E2CFBED9D00D727DE /* Frameworks */,
 				B219EFC82CFB7CEE00D727DE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +115,13 @@
 				B219EFE22CFB7CF100D727DE /* TequilaUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B219F00E2CFBED9D00D727DE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +144,7 @@
 			);
 			name = Tequila;
 			packageProductDependencies = (
+				B219F0252CFCA2A300D727DE /* SwiftSoup */,
 			);
 			productName = Tequila;
 			productReference = B219EFC72CFB7CEE00D727DE /* Tequila.app */;
@@ -195,6 +228,9 @@
 			);
 			mainGroup = B219EFBE2CFB7CEE00D727DE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B219F0242CFCA2A300D727DE /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B219EFC82CFB7CEE00D727DE /* Products */;
 			projectDirPath = "";
@@ -212,6 +248,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B219F0212CFC828500D727DE /* .gitignore in Resources */,
+				B219F01F2CFC823900D727DE /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,9 +427,11 @@
 		};
 		B219EFED2CFB7CF100D727DE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B219F01E2CFC823900D727DE /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Tequila/Tequila.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -401,6 +441,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tequila/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -416,9 +457,11 @@
 		};
 		B219EFEE2CFB7CF100D727DE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B219F01E2CFC823900D727DE /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Tequila/Tequila.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -428,6 +471,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Tequila/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -549,6 +593,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B219F0242CFCA2A300D727DE /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B219F0252CFCA2A300D727DE /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B219F0242CFCA2A300D727DE /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B219EFBF2CFB7CEE00D727DE /* Project object */;
 }

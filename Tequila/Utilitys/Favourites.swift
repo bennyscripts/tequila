@@ -8,32 +8,66 @@
 import SwiftUI
 
 class Favourites: ObservableObject {
-    @State private var favourites: Set<String>
-    private let key = "Favourites"
+    var favourites: [String] = []
+    var limit = 10
     
     init() {
-        if let data = UserDefaults.standard.array(forKey: key) as? [String] {
-            favourites = Set(data)
-        } else {
-            favourites = []
+        let favouritesFileURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("favourites.json")
+        
+        if !FileManager.default.fileExists(atPath: favouritesFileURL.path) {
+            let data = Data()
+            try? data.write(to: favouritesFileURL, options: [.atomicWrite, .completeFileProtection])
+        }
+        
+        let decoder = JSONDecoder()
+        
+        do {
+            let data = try Data(contentsOf: favouritesFileURL)
+            self.favourites = try decoder.decode([String].self, from: data)
+        } catch {
+            self.favourites = []
+        }
+    }
+    
+    func hitLimit() -> Bool {
+        return self.favourites.count >= limit
+    }
+    
+    func isEmpty() -> Bool {
+        return self.favourites.isEmpty
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
+    func save() {
+        let favouritesFileURL = getDocumentsDirectory().appendingPathComponent("favourites.json")
+        let encoder = JSONEncoder()
+        
+        do {
+            let data = try encoder.encode(self.favourites)
+            try data.write(to: favouritesFileURL, options: [.atomicWrite, .completeFileProtection])
+        } catch {
+            print("Failed to save favourites")
         }
     }
     
     func contains(_ game: Game) -> Bool {
-        favourites.contains(game.title)
+        return self.favourites.contains(game.title)
     }
     
     func add(_ game: Game) {
-        favourites.insert(game.title)
-        save()
+        if self.favourites.count >= limit {
+            return
+        }
+        self.favourites.append(game.title)
+        return save()
     }
     
     func remove(_ game: Game) {
-        favourites.remove(game.title)
-        save()
-    }
-    
-    func save() {
-        UserDefaults.standard.set(Array(favourites), forKey: key)
+        self.favourites.removeAll(where: { $0 == game.title })
+        return save()
     }
 }
