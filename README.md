@@ -8,7 +8,9 @@ Gaming on Mac's has become amazing now thanks to Rosetta 2, CrossOver and lots o
 
 ## Features
 Tequila is very barebones at the moment. You can save your favourite games to your Library which will allow you to access them at ease and there is a master list available with search.  
-![CleanShot 2024-12-03 at 1  04 45@2x](https://github.com/user-attachments/assets/8a268e2c-ff8e-4e3e-8ce1-b1d46ded3375)
+
+![CleanShot 2024-12-03 at 11  15 28@2x](https://github.com/user-attachments/assets/43421af9-6962-4dcb-8ce7-c0783824c94e)
+
 ![CleanShot 2024-12-03 at 1  05 01@2x](https://github.com/user-attachments/assets/069dae76-cc2a-459b-9cdc-508c36bf129a)
 
 ## To-do
