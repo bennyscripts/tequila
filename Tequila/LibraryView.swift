@@ -88,7 +88,7 @@ struct LibraryView: View {
                     .font(.subheadline)
             } else {
                 NavigationStack {
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         LazyVGrid(columns: [GridItem(.adaptive(minimum: 225))], spacing: 10) {
                             ForEach(gamesList.games.filter{favourites.contains($0)}) { game in
                                 NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
