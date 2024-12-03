@@ -37,6 +37,11 @@ class Favourites: ObservableObject {
         return self.favourites.isEmpty
     }
     
+    func reset() {
+        self.favourites = []
+        return save()
+    }
+    
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
         return paths[0]
