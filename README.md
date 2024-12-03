@@ -13,6 +13,7 @@ Tequila is very barebones at the moment. You can save your favourite games to yo
 
 ## To-do
 - [ ] Add aliases to master list
+- [ ] Add community updates for master list
 - [ ] Ability to filter the master list
 - [ ] Add caching for images and GiantBomb data
 - [ ] Categories to find best games to play with set translation layers
