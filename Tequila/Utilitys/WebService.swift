@@ -10,15 +10,9 @@ import SwiftUI
 class WebService {
     func getGames(completion: @escaping ([Game]) -> ()) {
         URLSession.shared.dataTask(with: URL(string: "https://benny.fun/api/mac-games")!) { data, response, error in
-            print("Getting games")
-            
             if let data = data {
-                print("Got data")
-                
                 let decoder = JSONDecoder()
                 if let gamesResponse = try? decoder.decode(GamesResponse.self, from: data) {
-                    print("Decoded games")
-                    
                     DispatchQueue.main.async {
                         completion(gamesResponse.response)
                     }
