@@ -13,5 +13,7 @@ struct TequilaApp: App {
         WindowGroup {
             ContentView()
         }
+        .windowResizability(.contentSize)
+//        .defaultSize(width: 880, height: 400)
     }
 }
