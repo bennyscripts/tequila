@@ -56,16 +56,6 @@
 			path = Tequila;
 			sourceTree = "<group>";
 		};
-		B219EFDB2CFB7CF100D727DE /* TequilaTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TequilaTests;
-			sourceTree = "<group>";
-		};
-		B219EFE52CFB7CF100D727DE /* TequilaUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TequilaUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,9 +90,6 @@
 				B219F0202CFC828000D727DE /* .gitignore */,
 				B219F01E2CFC823900D727DE /* Config.xcconfig */,
 				B219EFC92CFB7CEE00D727DE /* Tequila */,
-				B219EFDB2CFB7CF100D727DE /* TequilaTests */,
-				B219EFE52CFB7CF100D727DE /* TequilaUITests */,
-				B219F00E2CFBED9D00D727DE /* Frameworks */,
 				B219EFC82CFB7CEE00D727DE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -115,13 +102,6 @@
 				B219EFE22CFB7CF100D727DE /* TequilaUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B219F00E2CFBED9D00D727DE /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,9 +143,6 @@
 			dependencies = (
 				B219EFDA2CFB7CF100D727DE /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				B219EFDB2CFB7CF100D727DE /* TequilaTests */,
-			);
 			name = TequilaTests;
 			packageProductDependencies = (
 			);
@@ -185,9 +162,6 @@
 			);
 			dependencies = (
 				B219EFE42CFB7CF100D727DE /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B219EFE52CFB7CF100D727DE /* TequilaUITests */,
 			);
 			name = TequilaUITests;
 			packageProductDependencies = (
