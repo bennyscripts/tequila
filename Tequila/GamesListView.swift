@@ -104,10 +104,11 @@ struct GamesListView: View {
                             GameCardView(model:model)
                                 .environmentObject(game)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .searchable(text: $searchText)
-                .listStyle(.inset)
+                .background(Color.clear)
             }
             .navigationTitle("Tequila")
             .toolbar {
