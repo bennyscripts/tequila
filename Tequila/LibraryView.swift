@@ -13,7 +13,7 @@ struct GameCard: View {
     
     @State var appeared = false
     @State var giantBombGame: GiantBombGame? = nil
-    @State var imageScale = 1.0
+    @State var imageScale = 1.05
     @State var imageRotation = 0.0
     @State var imageBlur = 0.0
     @State var shadowY = 2.0
@@ -51,7 +51,7 @@ struct GameCard: View {
         .onHover { hovering in
             withAnimation(Animation.bouncy(duration: 0.5)) {
                 imageBlur = hovering ? 5 : 0
-                imageScale = hovering ? 1.3 : 1.0
+                imageScale = hovering ? 1.4 : 1.05
                 imageRotation = hovering ? [2, -2].randomElement()! : 0
                 shadowY = hovering ? 5 : 2
                 textOpacity = hovering ? 1 : 0
