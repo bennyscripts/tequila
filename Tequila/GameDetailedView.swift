@@ -165,7 +165,22 @@ struct GameDetailedView: View {
         }
         .padding()
         .navigationTitle(game.title)
+        .toolbar {
+            ToolbarItem {
+                Button(action: {
+                    if let url = URL(string: giantBombGame?.site_detail_url ?? "https://www.giantbomb.com/") {
+                        NSWorkspace.shared.open(url)
+                    }
+                }) {
+                    Image(systemName: "safari")
+                }
+            }
+        }
+        .onDisappear() {
+            model.showRefreshButton = true
+        }
         .onAppear {
+            model.showRefreshButton = false
             favourite = model.favourites.contains(game)
             
             model.webService.searchGiantBomb(query: game.title) { result in

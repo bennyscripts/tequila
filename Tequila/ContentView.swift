@@ -11,9 +11,25 @@ class ViewModel: ObservableObject {
     @Published var gamesList = Games()
     @Published var favourites = Favourites()
     @Published var webService = WebService()
+    @Published var showRefreshButton = false
+    @Published var refreshButtonCooldown = false
     
     func updateView() {
         self.objectWillChange.send()
+    }
+    
+    func refresh() {
+        if !refreshButtonCooldown {
+            self.gamesList.refresh()
+            self.favourites.save()
+            self.refreshButtonCooldown = true
+        } else {
+            print("Cooldown in effect! Please dont spam my API 🙏")
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.refreshButtonCooldown = false
+        }
     }
 }
 

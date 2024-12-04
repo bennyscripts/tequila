@@ -79,6 +79,7 @@ struct GamesListView: View {
     
     @State private var searchText = ""
     @State private var sortOrder = [KeyPathComparator(\Game.title)]
+    @State private var refreshButtonRotation = 0.0
     
     func filterGames() -> [Game] {
         if searchText.isEmpty {
@@ -109,6 +110,27 @@ struct GamesListView: View {
                 .listStyle(.inset)
             }
             .navigationTitle("Tequila")
+            .toolbar {
+                if model.showRefreshButton {
+                    ToolbarItem(placement: .navigation) {
+                        Button(action: {
+                            model.refresh()
+                            withAnimation {
+                                refreshButtonRotation += 360
+                            }
+                        }) {
+                            Label("Refresh", systemImage: "arrow.clockwise")
+                                .rotationEffect(.degrees(refreshButtonRotation))
+                        }
+                    }
+                }
+            }
+            .onAppear() {
+                model.showRefreshButton = true
+            }
+            .onDisappear() {
+                model.showRefreshButton = false
+            }
         }
     }
 }
