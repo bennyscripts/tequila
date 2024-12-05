@@ -17,10 +17,6 @@ class ViewModel: ObservableObject {
     @Published var compatibilityFilter = ""
     @Published var translationLayerFilter = ""
     
-    init() {
-        print("ViewModel init")
-    }
-    
     func updateView() {
         self.objectWillChange.send()
     }
