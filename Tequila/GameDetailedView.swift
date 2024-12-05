@@ -194,8 +194,7 @@ struct GameDetailedView: View {
                 }
                 .padding(.leading, 8)
             }
-            .padding(.bottom)
-            .padding(.top)
+            .padding(.vertical)
             Spacer()
             HStack {
                 Button(action: {nativePopover.toggle()}) {
@@ -238,7 +237,14 @@ struct GameDetailedView: View {
                 .popover(isPresented: $parallelsPopover, arrowEdge: .top) {
                     CompatibilityDetailedView(compatibility: game.compatibility.parallels, translationLayerName: "Parallels")
                 }
-                Spacer()
+            }
+        }
+        .padding(.top)
+        .padding(.horizontal)
+        .padding(.bottom, from.localizedCaseInsensitiveContains("GamesListView") ? 16 : 0)
+        .navigationTitle(game.title)
+        .toolbar {
+            ToolbarItemGroup(placement: .primaryAction) {
                 Button(action: {editGameRequestPopover.toggle()}) {
                     Image(systemName: "pencil")
                         .foregroundColor(.secondary)
