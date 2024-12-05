@@ -119,22 +119,36 @@ class GameArtwork: Decodable, ObservableObject {
     let response: String
 }
 
-class Game: Decodable, ObservableObject, Identifiable {
+class Game: Decodable, ObservableObject, Identifiable, Encodable {
     var title: String = ""
-    var compatibility: Compatibility = Compatibility()
+    var compatibility: Compatibility = Compatibility(crossover: "Unknown", linux_arm: "Unknown", native: "Unknown", parallels: "Unknown", rosetta_2: "Unknown", wine: "Unknown")
     var aliases: [String] = []
+    
+    init(title: String, compatibility: Compatibility, aliases: [String]) {
+        self.title = title
+        self.compatibility = compatibility
+        self.aliases = aliases
+    }
 }
 
-class Compatibility: Decodable, ObservableObject {
+class Compatibility: Decodable, ObservableObject, Encodable {
     var crossover: String = "Unknown"
     var linux_arm: String = "Unknown"
     var native: String = "Unknown"
     var parallels: String = "Unknown"
     var rosetta_2: String = "Unknown"
     var wine: String = "Unknown"
-    
     var all: [String] {
         [crossover, native, parallels, rosetta_2]
+    }
+    
+    init(crossover: String, linux_arm: String, native: String, parallels: String, rosetta_2: String, wine: String) {
+        self.crossover = crossover
+        self.linux_arm = linux_arm
+        self.native = native
+        self.parallels = parallels
+        self.rosetta_2 = rosetta_2
+        self.wine = wine
     }
     
     func getLayers() -> [String: String] {

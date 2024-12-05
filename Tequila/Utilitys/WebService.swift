@@ -81,4 +81,62 @@ class WebService {
             }
         }.resume()
     }
+    
+    func sendWebhook(content: String, embed: [String: Any]) {
+        let url = URL(string: "\(Bundle.main.infoDictionary!["DISCORD_WEBHOOK"]!)")!
+        let jsonPayload: [String: Any] = ["content": content, "embeds": [embed]]
+        let jsonData = try? JSONSerialization.data(withJSONObject: jsonPayload)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode == 204 {
+                    print("Webhook sent successfully.")
+                } else {
+                    print("Failed to send webhook.")
+                }
+            }
+        }.resume()
+    }
+    
+    func sendNewGameRequest(title: String, native: String, rosetta_2: String, crossover: String, parallels: String, aliases: String) {
+        var newAliases = [String]()
+        
+        if title.isEmpty {
+            return print("Title cannot be empty")
+        }
+        
+        if aliases.contains(",") {
+            newAliases = aliases.components(separatedBy: ", ")
+        } else {
+            newAliases.append(aliases)
+        }
+        
+        let game = Game(
+            title: title,
+            compatibility: Compatibility(
+                crossover: crossover,
+                linux_arm: "Unknown",
+                native: native,
+                parallels: parallels,
+                rosetta_2: rosetta_2,
+                wine: "Unknown"
+            ),
+            aliases: newAliases
+        )
+        
+//        turn the game object into a json string
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try? encoder.encode(game)
+        
+        sendWebhook(content: "<@\(Bundle.main.infoDictionary!["DISCORD_ID"]!)>", embed: [
+            "title": "New Game Request",
+            "description": "```json\n\(String(data: data!, encoding: .utf8)!)\n```",
+        ])
+    }
 }

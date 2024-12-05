@@ -106,6 +106,108 @@ struct FilterView: View {
     }
 }
 
+struct NewGameView: View {
+    @ObservedObject var model: ViewModel
+    @State private var title = ""
+    @State private var native = "N/A"
+    @State private var rosetta_2 = "N/A"
+    @State private var crossover = "N/A"
+    @State private var parallels = "N/A"
+    @State private var aliases = ""
+    @State private var showEmptyTitleWarning = false
+    @State private var submitted = false
+        
+    var body: some View {
+        if submitted {
+            Text("Game request submitted! Game requests are added manually so you wont see immediate changes. You will be able to submit another request in \(model.gameRequestCooldownCurrentWaitTime) seconds...")
+            .padding()
+            .frame(width: 300)
+        } else {
+            Text("New Game Request")
+                .font(.title3)
+                .padding(.top)
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("Title:           ")
+                    TextField("Epic Game III", text: $title)
+                        .cornerRadius(7)
+                }
+                Picker("Native:        ", selection: $native) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                .padding(.top, 1)
+                Picker("Rosetta 2:   ", selection: $rosetta_2) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                Picker("CrossOver: ", selection: $crossover) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                Picker("Parallels:     ", selection: $parallels) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                .padding(.bottom, 2)
+                HStack {
+                    Text("Aliases:      ")
+                    TextField("Epic Game 3, Epic Game: The Trilogy", text: $aliases)
+                        .cornerRadius(7)
+                }
+                Text("Separate aliases with commas")
+                    .font(.caption)
+                    .padding(.bottom)
+                HStack {
+                    Button("Submit") {
+                        if title.isEmpty {
+                            showEmptyTitleWarning.toggle()
+                        } else {
+                            model.addGameRequest(title: title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
+                            title = ""
+                            native = "N/A"
+                            rosetta_2 = "N/A"
+                            crossover = "N/A"
+                            parallels = "N/A"
+                            aliases = ""
+                            submitted = true
+                        }
+                    }
+                    Spacer()
+                    if showEmptyTitleWarning {
+                        Text("The title cannot be empty!")
+                    } else {
+                        Text("")
+                    }
+                }
+            }
+            .padding()
+            .frame(width: 300)
+            .onAppear() {
+                if model.gameRequestCooldown {
+                    submitted = true
+                }
+            }
+        }
+    }
+}
+
 struct GamesListView: View {
     @ObservedObject var model: ViewModel
     @EnvironmentObject var gamesList: Games
@@ -117,6 +219,7 @@ struct GamesListView: View {
     @State private var titleSortAscending = true
     @State private var showFilterPopover = false
     @State private var showUpButton = false
+    @State private var showNewGamePopover = false
     
     func filterGames() -> [Game] {
         return gamesList.games.filter { game in
@@ -210,6 +313,14 @@ struct GamesListView: View {
                         }
                         .popover(isPresented: $showFilterPopover, arrowEdge: .bottom) {
                             FilterView(model: model)
+                        }
+                        Button(action: {
+                            showNewGamePopover.toggle()
+                        }) {
+                            Label("New Game", systemImage: "plus")
+                        }
+                        .popover(isPresented: $showNewGamePopover, arrowEdge: .bottom) {
+                            NewGameView(model: model)
                         }
                     }
                 }

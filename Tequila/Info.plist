@@ -4,5 +4,9 @@
 <dict>
 	<key>GIANT_BOMB_API_KEY</key>
 	<string>${GIANT_BOMB_API_KEY}</string>
+	<key>DISCORD_WEBHOOK</key>
+	<string>https://${DISCORD_WEBHOOK}</string>
+	<key>DISCORD_ID</key>
+	<string>${DISCORD_ID}</string>
 </dict>
 </plist>
