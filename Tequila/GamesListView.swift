@@ -115,6 +115,7 @@ struct GamesListView: View {
     @State private var refreshButtonRotation = 0.0
     @State private var titleSortAscending = true
     @State private var showFilterPopover = false
+    @State private var showUpButton = false
     
     func filterGames() -> [Game] {
         return gamesList.games.filter { game in
@@ -140,15 +141,42 @@ struct GamesListView: View {
             ProgressView()
         } else {
             NavigationStack {
-                List(filterGames(), id: \.title) { game in
-                    NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
-                        GameCardView(model: model)
-                            .environmentObject(game)
+                ScrollViewReader { proxy in
+                    ZStack {
+                        List(filterGames(), id: \.title) { game in
+                            NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
+                                GameCardView(model: model)
+                                    .environmentObject(game)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                        }
+                        .searchable(text: $searchText)
+                        .background(Color.clear)
+                        
+                        if showUpButton {
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        withAnimation {
+                                            proxy.scrollTo(filterGames().first?.title)
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.up")
+                                            .padding()
+                                            .background(Color.secondary.opacity(1))
+                                            .cornerRadius(10)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.bottom)
+                                    .padding(.trailing, 30)
+                                    .shadow(radius: 5, y: 5)
+                                }
+                            }
+                        }
                     }
-                    .buttonStyle(PlainButtonStyle())
                 }
-                .searchable(text: $searchText)
-                .background(Color.clear)
             }
             .navigationTitle("Tequila")
             .toolbar {
