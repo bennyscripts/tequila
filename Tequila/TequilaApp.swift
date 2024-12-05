@@ -26,14 +26,15 @@ class ViewModel: ObservableObject {
     }
     
     func refresh() {
-        if !refreshButtonCooldown {
-            self.gamesList.refresh()
-            self.favourites.save()
-            self.refreshButtonCooldown = true
-        } else {
-            print("Cooldown in effect! Please dont spam my API 🙏")
+        if refreshButtonCooldown {
+            return print("Cooldown active! Please dont spam my API 🙏")
         }
         
+        gamesList.refresh()
+        gamesList.sort()
+        favourites.save()
+        
+        refreshButtonCooldown = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             self.refreshButtonCooldown = false
         }

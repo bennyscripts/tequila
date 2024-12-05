@@ -97,6 +97,7 @@ class Games: ObservableObject {
     
     init() {
         refresh()
+        sort()
     }
     
     func sort() {
@@ -107,8 +108,6 @@ class Games: ObservableObject {
         WebService().getGames { games in
             self.games = games
         }
-        
-        sort()
     }
 }
 
