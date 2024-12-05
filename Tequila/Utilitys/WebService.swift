@@ -45,9 +45,7 @@ class WebService {
             DispatchQueue.main.async {
                 completion([cachedGame])
             }
-            return
         } else {
-            
             let query = query.replacingOccurrences(of: " ", with: "+")
             let url = URL(string: "https://www.giantbomb.com/api/search/?api_key=\(Bundle.main.infoDictionary!["GIANT_BOMB_API_KEY"]!)&format=json&query=\(query.lowercased())&limit=1")!
             URLSession.shared.dataTask(with: url) { data, response, error in
