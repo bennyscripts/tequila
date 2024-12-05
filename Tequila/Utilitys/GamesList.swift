@@ -38,7 +38,7 @@ func bestTranslationLayer(game: Game) -> String {
     ]
     
     let translationLayerTexts = [
-        "crossover": "using Crossover",
+        "crossover": "using CrossOver",
         "native": "natively",
         "parallels": "using Parallels",
         "rosetta_2": "using Rosetta 2"
