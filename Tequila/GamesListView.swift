@@ -298,6 +298,14 @@ struct GamesListView: View {
                     }
                     ToolbarItemGroup(placement: .primaryAction) {
                         Button(action: {
+                            showFilterPopover.toggle()
+                        }) {
+                            Label("Filter", systemImage: "line.horizontal.3.decrease.circle")
+                        }
+                        .popover(isPresented: $showFilterPopover, arrowEdge: .bottom) {
+                            FilterView(model: model)
+                        }
+                        Button(action: {
                             titleSortAscending.toggle()
                             withAnimation {
                                 sortButtonRotation += 180
@@ -305,14 +313,6 @@ struct GamesListView: View {
                         }) {
                             Label("Sort", systemImage: "arrow.up")
                                 .rotationEffect(.degrees(sortButtonRotation))
-                        }
-                        Button(action: {
-                            showFilterPopover.toggle()
-                        }) {
-                            Label("Filter", systemImage: "line.horizontal.3.decrease.circle")
-                        }
-                        .popover(isPresented: $showFilterPopover, arrowEdge: .bottom) {
-                            FilterView(model: model)
                         }
                         Button(action: {
                             showNewGamePopover.toggle()

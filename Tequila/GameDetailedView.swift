@@ -20,6 +20,96 @@ struct CompatibilityDetailedView: View {
     }
 }
 
+struct EditGameView: View {
+    @ObservedObject var model: ViewModel
+    @EnvironmentObject var game: Game
+    
+    @State private var native = "N/A"
+    @State private var rosetta_2 = "N/A"
+    @State private var crossover = "N/A"
+    @State private var parallels = "N/A"
+    @State private var aliases = ""
+    @State private var submitted = false
+        
+    var body: some View {
+        if submitted {
+            Text("Game edit request submitted! Your request is checked and finalised manually, you wont see immediate effect. You will be able to submit another request in \(model.gameRequestCooldownCurrentWaitTime) seconds...")
+            .padding()
+            .frame(width: 300)
+        } else {
+            Text("Edit Game Request")
+                .font(.title3)
+                .padding(.top)
+            VStack(alignment: .leading) {
+                Picker("Native:        ", selection: $native) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                .padding(.top, 1)
+                Picker("Rosetta 2:   ", selection: $rosetta_2) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                Picker("CrossOver: ", selection: $crossover) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                Picker("Parallels:     ", selection: $parallels) {
+                    Text("N/A").tag("N/A")
+                    Text("Unknown").tag("Unknown")
+                    Text("Menu").tag("Menu")
+                    Text("Runs").tag("Runs")
+                    Text("Playable").tag("Playable")
+                    Text("Perfect").tag("Perfect")
+                }
+                .padding(.bottom, 2)
+                HStack {
+                    Text("Aliases:      ")
+                    TextField("Epic Game 3, Epic Game: The Trilogy", text: $aliases)
+                        .cornerRadius(7)
+                }
+                Text("Separate aliases with commas")
+                    .font(.caption)
+                    .padding(.bottom)
+                Button("Submit") {
+                    model.editGameRequest(title: game.title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
+                    native = game.compatibility.native
+                    rosetta_2 = game.compatibility.rosetta_2
+                    crossover = game.compatibility.crossover
+                    parallels = game.compatibility.parallels
+                    aliases = game.aliases.joined(separator: ", ")
+                    submitted = true
+                }
+            }
+            .padding()
+            .frame(width: 300)
+            .onAppear() {
+                native = game.compatibility.native
+                rosetta_2 = game.compatibility.rosetta_2
+                crossover = game.compatibility.crossover
+                parallels = game.compatibility.parallels
+                aliases = game.aliases.joined(separator: ", ")
+                
+                if model.gameRequestCooldown {
+                    submitted = true
+                }
+            }
+        }
+    }
+}
+
 struct GameDetailedView: View {
     @EnvironmentObject var game: Game
 //    @EnvironmentObject var favourites: Favourites
@@ -33,6 +123,7 @@ struct GameDetailedView: View {
     @State var rosettaPopover = false
     @State var crossoverPopover = false
     @State var parallelsPopover = false
+    @State var editGameRequestPopover = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -144,6 +235,14 @@ struct GameDetailedView: View {
                     CompatibilityDetailedView(compatibility: game.compatibility.parallels, translationLayerName: "Parallels")
                 }
                 Spacer()
+                Button(action: {editGameRequestPopover.toggle()}) {
+                    Image(systemName: "pencil")
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .popover(isPresented: $editGameRequestPopover, arrowEdge: .top) {
+                    EditGameView(model: model).environmentObject(game)
+                }
                 Button(action: {
                     if model.favourites.hitLimit() {
                         print("hit limit")

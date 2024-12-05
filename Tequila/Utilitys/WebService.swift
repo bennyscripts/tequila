@@ -103,6 +103,42 @@ class WebService {
         }.resume()
     }
     
+    func sendEditGameRequest(title: String, native: String, rosetta_2: String, crossover: String, parallels: String, aliases: String) {
+        var newAliases = [String]()
+        
+        if title.isEmpty {
+            return print("Title cannot be empty")
+        }
+        
+        if aliases.contains(",") {
+            newAliases = aliases.components(separatedBy: ", ")
+        } else {
+            newAliases.append(aliases)
+        }
+        
+        let game = Game(
+            title: title,
+            compatibility: Compatibility(
+                crossover: crossover,
+                linux_arm: "Unknown",
+                native: native,
+                parallels: parallels,
+                rosetta_2: rosetta_2,
+                wine: "Unknown"
+            ),
+            aliases: newAliases
+        )
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try? encoder.encode(game)
+        
+        sendWebhook(content: "<@\(Bundle.main.infoDictionary!["DISCORD_ID"]!)>", embed: [
+            "title": "Edit Game Request",
+            "description": "```json\n\(String(data: data!, encoding: .utf8)!)\n```",
+        ])
+    }
+    
     func sendNewGameRequest(title: String, native: String, rosetta_2: String, crossover: String, parallels: String, aliases: String) {
         var newAliases = [String]()
         

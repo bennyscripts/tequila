@@ -60,6 +60,29 @@ class ViewModel: ObservableObject {
             }
         }
     }
+    
+    func editGameRequest(title: String, native: String, rosetta_2: String, crossover: String, parallels: String, aliases: String) {
+        if title.isEmpty {
+            return print("Title cannot be empty")
+        }
+        
+        if gameRequestCooldown {
+            return print("Cooldown active! Please dont spam my API 🙏")
+        }
+        
+        webService.sendEditGameRequest(title: title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
+        gameRequestCooldown = true
+        gameRequestCooldownCurrentWaitTime = 60
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            self.gameRequestCooldownCurrentWaitTime -= 1
+            
+            if self.gameRequestCooldownCurrentWaitTime == 0 {
+                timer.invalidate()
+                self.gameRequestCooldown = false
+            }
+        }
+    }
 }
 
 extension NSTextField {
