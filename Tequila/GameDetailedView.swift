@@ -119,7 +119,8 @@ struct GameDetailedView: View {
     @EnvironmentObject var game: Game
 //    @EnvironmentObject var favourites: Favourites
     @ObservedObject var model: ViewModel
-    @State var gameArtwork: String = "No artwork found."
+    var from: String
+    @State var gameArtURL: String = "https://placehold.co/225x300.jpg"
     @State var giantBombGame: GiantBombGame? = nil
     @State var gameDescription: String = "No description found..."
     @State var favourite: Bool = false
@@ -143,17 +144,17 @@ struct GameDetailedView: View {
             
             HStack(alignment: .top) {
                 VStack {
+                    AsyncImage(url: URL(string: gameArtURL)!) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 225, height: 300)
+                            .clipped()
+                            .cornerRadius(7.5)
+                    } placeholder: {
+                        ProgressView()
+                    }
                     if giantBombGame != nil {
-                        AsyncImage(url: URL(string: giantBombGame!.image!.medium_url)!) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 225, height: 300)
-                                .clipped()
-                                .cornerRadius(5)
-                        } placeholder: {
-                            ProgressView()
-                        }
                         Button(action: {
                             if let url = URL(string: giantBombGame?.site_detail_url ?? "https://www.giantbomb.com/") {
                                 NSWorkspace.shared.open(url)
@@ -170,13 +171,6 @@ struct GameDetailedView: View {
                             .offset(x: -20, y: 5)
                         }
                         .buttonStyle(PlainButtonStyle())
-                    } else {
-                        Image(.placeholder)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 225, height: 300)
-                            .clipped()
-                            .cornerRadius(5)
                     }
                 }
                 VStack(alignment: .leading) {
