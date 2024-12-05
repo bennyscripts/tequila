@@ -99,10 +99,16 @@ class Games: ObservableObject {
         refresh()
     }
     
+    func sort() {
+        games.sort { $0.title < $1.title }
+    }
+    
     func refresh() {
         WebService().getGames { games in
             self.games = games
         }
+        
+        sort()
     }
 }
 
@@ -128,6 +134,10 @@ class Compatibility: Decodable, ObservableObject {
     var rosetta_2: String = "Unknown"
     var wine: String = "Unknown"
     
+    var all: [String] {
+        [crossover, native, parallels, rosetta_2]
+    }
+    
     func getLayers() -> [String: String] {
         [
             "crossover": crossover,
@@ -135,5 +145,20 @@ class Compatibility: Decodable, ObservableObject {
             "parallels": parallels,
             "rosetta_2": rosetta_2
         ]
+    }
+
+    func getLayer(_ layer: String) -> String {
+        switch layer {
+        case "crossover":
+            return crossover
+        case "native":
+            return native
+        case "parallels":
+            return parallels
+        case "rosetta_2":
+            return rosetta_2
+        default:
+            return "Unknown"
+        }
     }
 }

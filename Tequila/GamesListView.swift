@@ -72,24 +72,66 @@ struct GameCardView: View {
     }
 }
 
+struct FilterView: View {
+    @ObservedObject var model: ViewModel
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Picker("Translation Layer", selection: $model.translationLayerFilter) {
+                Text("All").tag("")
+                Text("Native").tag("native")
+                Text("Rosetta 2").tag("rosetta_2")
+                Text("CrossOver").tag("crossover")
+                Text("Parallels").tag("parallels")
+            }
+            .pickerStyle(MenuPickerStyle())
+            
+            Picker("Compatibility", selection: $model.compatibilityFilter) {
+                Text("All").tag("")
+                Text("N/A").tag("n/a")
+                Text("Unknown").tag("unknown")
+                Text("Menu").tag("menu")
+                Text("Runs").tag("runs")
+                Text("Playable").tag("playable")
+                Text("Perfect").tag("perfect")
+            }
+            .pickerStyle(MenuPickerStyle())
+            
+            Button("Reset") {
+                model.translationLayerFilter = ""
+                model.compatibilityFilter = ""
+            }
+        }
+        .padding()
+    }
+}
+
 struct GamesListView: View {
     @ObservedObject var model: ViewModel
     @EnvironmentObject var gamesList: Games
     @EnvironmentObject var favourites: Favourites
     
     @State private var searchText = ""
-    @State private var sortOrder = [KeyPathComparator(\Game.title)]
     @State private var refreshButtonRotation = 0.0
+    @State private var titleSortAscending = true
+    @State private var showFilterPopover = false
     
     func filterGames() -> [Game] {
-        if searchText.isEmpty {
-            return gamesList.games
-        }
-        
         return gamesList.games.filter { game in
-            game.title.localizedCaseInsensitiveContains(searchText) || game.aliases.contains(where: { alias in
-                alias.localizedCaseInsensitiveContains(searchText)
-            })
+            let searchMatch = searchText.isEmpty ||
+            game.title.localizedCaseInsensitiveContains(searchText) ||
+            game.aliases.contains(where: { $0.localizedCaseInsensitiveContains(searchText) })
+            
+            let translationLayerMatch = model.translationLayerFilter.isEmpty || model.compatibilityFilter.isEmpty ||
+            game.compatibility.getLayer(model.translationLayerFilter).localizedCaseInsensitiveContains(model.compatibilityFilter)
+            
+            return searchMatch && translationLayerMatch
+        }.sorted { game1, game2 in
+            if titleSortAscending {
+                return game1.title < game2.title
+            } else {
+                return game1.title > game2.title
+            }
         }
     }
     
@@ -98,14 +140,12 @@ struct GamesListView: View {
             ProgressView()
         } else {
             NavigationStack {
-                List {
-                    ForEach(filterGames()) { game in
-                        NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
-                            GameCardView(model:model)
-                                .environmentObject(game)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                List(filterGames(), id: \.title) { game in
+                    NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
+                        GameCardView(model: model)
+                            .environmentObject(game)
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
                 .searchable(text: $searchText)
                 .background(Color.clear)
@@ -122,6 +162,21 @@ struct GamesListView: View {
                         }) {
                             Label("Refresh", systemImage: "arrow.clockwise")
                                 .rotationEffect(.degrees(refreshButtonRotation))
+                        }
+                    }
+                    ToolbarItemGroup(placement: .primaryAction) {
+                        Button(action: {
+                            titleSortAscending.toggle()
+                        }) {
+                            Label("Sort", systemImage: titleSortAscending ? "arrow.up" : "arrow.down")
+                        }
+                        Button(action: {
+                            showFilterPopover.toggle()
+                        }) {
+                            Label("Filter", systemImage: "line.horizontal.3.decrease.circle")
+                        }
+                        .popover(isPresented: $showFilterPopover, arrowEdge: .bottom) {
+                            FilterView(model: model)
                         }
                     }
                 }
