@@ -175,7 +175,7 @@ struct NewGameView: View {
                     .font(.caption)
                     .padding(.bottom)
                 HStack {
-                    Button("Submit") {
+                    Button("Submit Request") {
                         if title.isEmpty {
                             showEmptyTitleWarning.toggle()
                         } else {
@@ -189,12 +189,7 @@ struct NewGameView: View {
                             submitted = true
                         }
                     }
-                    Spacer()
-                    if showEmptyTitleWarning {
-                        Text("The title cannot be empty!")
-                    } else {
-                        Text("")
-                    }
+                    .disabled(title.isEmpty)
                 }
             }
             .padding()

@@ -83,14 +83,19 @@ struct EditGameView: View {
                 Text("Separate aliases with commas")
                     .font(.caption)
                     .padding(.bottom)
-                Button("Submit") {
-                    model.editGameRequest(title: game.title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
-                    native = game.compatibility.native
-                    rosetta_2 = game.compatibility.rosetta_2
-                    crossover = game.compatibility.crossover
-                    parallels = game.compatibility.parallels
-                    aliases = game.aliases.joined(separator: ", ")
-                    submitted = true
+                HStack {
+                    Button("Submit Request") {
+                        if native != game.compatibility.native || rosetta_2 != game.compatibility.rosetta_2 || crossover != game.compatibility.crossover || parallels != game.compatibility.parallels || aliases != game.aliases.joined(separator: ", ") {
+                            model.editGameRequest(title: game.title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
+                            native = game.compatibility.native
+                            rosetta_2 = game.compatibility.rosetta_2
+                            crossover = game.compatibility.crossover
+                            parallels = game.compatibility.parallels
+                            aliases = game.aliases.joined(separator: ", ")
+                            submitted = true
+                        }
+                    }
+                    .disabled(native == game.compatibility.native && rosetta_2 == game.compatibility.rosetta_2 && crossover == game.compatibility.crossover && parallels == game.compatibility.parallels && aliases == game.aliases.joined(separator: ", "))
                 }
             }
             .padding()
