@@ -47,6 +47,19 @@ struct TequilaApp: App {
             ContentView(model: model)
         }
         .windowResizability(.contentSize)
-//        .defaultSize(width: 880, height: 400)
+        .commands {
+            CommandGroup(replacing: CommandGroupPlacement.newItem) {
+                Button(action: {
+                    model.refresh()
+                }) {
+                    Label("Refresh", systemImage: "arrow.clockwise")
+                }
+                Button(action: {
+                    model.cache.clear()
+                }) {
+                    Label("Clear Cache", systemImage: "trash")
+                }
+            }
+        }
     }
 }

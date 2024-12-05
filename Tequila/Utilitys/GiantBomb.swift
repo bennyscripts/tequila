@@ -18,13 +18,13 @@ class GiantBomb: ObservableObject {
     }
 }
 
-class GiantBombImageTag: Decodable {
+class GiantBombImageTag: Decodable, Encodable {
     let api_detail_url: String
     let name: String
     let total: Int
 }
 
-class GiantBombImage: Decodable {
+class GiantBombImage: Decodable, Encodable {
     let icon_url: String
     let medium_url: String
     let screen_url: String
@@ -36,12 +36,12 @@ class GiantBombImage: Decodable {
     let original_url: String
 }
 
-class GiantBombPlatform: Decodable {
+class GiantBombPlatform: Decodable, Encodable {
     let name: String
     let site_detail_url: String
 }
 
-class GiantBombGame: Decodable {
+class GiantBombGame: Decodable, Encodable {
     var name: String = ""
     var deck: String = "Couldn't find a description for this game."
     var description: String? = nil
@@ -51,8 +51,6 @@ class GiantBombGame: Decodable {
     var platforms: [GiantBombPlatform]? = nil
     var image_tags: [GiantBombImageTag]? = nil
     var site_detail_url: String? = nil
-    
-    init() {}
 }
 
 struct GiantBombResponse: Decodable {
