@@ -14,10 +14,10 @@ struct ContentView: View {
         NavigationView {
             List {
                 NavigationLink(destination: LibraryView(model: model).environmentObject(model.gamesList).environmentObject(model.favourites)) {
-                    Label("Library", systemImage: "books.vertical")
+                    Label(" Library", systemImage: "books.vertical")
                 }
                 NavigationLink(destination: GamesListView(model: model).environmentObject(model.gamesList).environmentObject(model.favourites)) {
-                    Label("Games", systemImage: "gamecontroller")
+                    Label(" Games", systemImage: "gamecontroller")
                 }
             }
             .listStyle(SidebarListStyle())
