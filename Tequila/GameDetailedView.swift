@@ -261,21 +261,7 @@ struct GameDetailedView: View {
                     }
                 }) {
                     Image(systemName: favourite ? "star.fill" : "star")
-                        .foregroundColor(favourite ? .yellow : .gray)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-        }
-        .padding()
-        .navigationTitle(game.title)
-        .toolbar {
-            ToolbarItem {
-                Button(action: {
-                    if let url = URL(string: giantBombGame?.site_detail_url ?? "https://www.giantbomb.com/") {
-                        NSWorkspace.shared.open(url)
-                    }
-                }) {
-                    Image(systemName: "safari")
+                        .foregroundColor(favourite ? .yellow : .secondary)
                 }
             }
         }
