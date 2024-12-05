@@ -57,7 +57,7 @@ struct ContentView: View {
                 .environmentObject(model.favourites)
 //            GamesListView(model: model)
         }
-        .frame(minWidth: 880, minHeight: 500)
+        .frame(minWidth: 875, minHeight: 500)
         .toolbar {
             ToolbarItem(placement: .navigation) {
                 Button(action: {

@@ -97,10 +97,10 @@ struct GameDetailedView: View {
                     }
                     .frame(height: 250)
                 }
-                .padding(.leading)
+                .padding(.leading, 8)
             }
             .padding(.bottom)
-            .padding(.top, 8)
+            .padding(.top)
             Spacer()
             HStack {
                 Button(action: {nativePopover.toggle()}) {
