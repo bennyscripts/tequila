@@ -190,7 +190,7 @@ struct GameDetailedView: View {
                         Text(gameDescription)
                             .font(.body)
                     }
-                    .frame(height: 250)
+                    .frame(minHeight: 250)
                 }
                 .padding(.leading, 8)
             }
