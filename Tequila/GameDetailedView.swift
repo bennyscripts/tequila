@@ -139,8 +139,13 @@ struct GameDetailedView: View {
                 Spacer()
             }
             .padding()
-            .background(Color.secondary.opacity(0.1))
-            .cornerRadius(5)
+            .background(Color.gray.opacity(0.05))
+            .overlay(
+                RoundedRectangle(cornerRadius: 7.5)
+                .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+            )
+            .cornerRadius(7.5)
+            .padding(.bottom, -5)
             
             HStack(alignment: .top) {
                 VStack {
