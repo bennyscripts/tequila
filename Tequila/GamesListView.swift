@@ -243,7 +243,7 @@ struct GamesListView: View {
                 ScrollViewReader { proxy in
                     ZStack {
                         List(filterGames(), id: \.title) { game in
-                            NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
+                            NavigationLink(destination: GameDetailedView(model: model, from: "GamesListView").environmentObject(game)) {
                                 GameCardView(model: model)
                                     .environmentObject(game)
                             }
