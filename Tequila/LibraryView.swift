@@ -17,10 +17,15 @@ struct GameCard: View {
     @State var imageScale = 1.05
     @State var imageRotation = 0.0
     @State var imageBlur = 0.0
-    @State var shadowY = 2.0
+    @State var shadowY = 0.0
     @State var shadowRadius = 5.0
     @State var textOpacity = 0.0
     @State var gameArtURL: String = "https://placehold.co/225x300.jpg"
+    
+    init(noHover: Bool) {
+        self.noHover = noHover
+        shadowY = noHover ? 2.0 : 0.0
+    }
     
     var body: some View {
         ZStack {
@@ -51,7 +56,6 @@ struct GameCard: View {
             }
             .opacity(textOpacity)
         }
-        .cornerRadius(7.5)
         .shadow(radius: 2, x: 0, y: shadowY)
         .onHover { hovering in
             if !noHover {
@@ -237,6 +241,7 @@ struct LibraryView: View {
                                         .environmentObject(game)
                                         .environmentObject(model)
                                 }
+                                .cornerRadius(7.5)
                                 .buttonStyle(PlainButtonStyle())
                                 .contextMenu {
                                     Button(action: {
