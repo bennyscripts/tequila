@@ -113,6 +113,7 @@ struct GamesListView: View {
     
     @State private var searchText = ""
     @State private var refreshButtonRotation = 0.0
+    @State private var sortButtonRotation = 0.0
     @State private var titleSortAscending = true
     @State private var showFilterPopover = false
     @State private var showUpButton = false
@@ -195,8 +196,12 @@ struct GamesListView: View {
                     ToolbarItemGroup(placement: .primaryAction) {
                         Button(action: {
                             titleSortAscending.toggle()
+                            withAnimation {
+                                sortButtonRotation += 180
+                            }
                         }) {
-                            Label("Sort", systemImage: titleSortAscending ? "arrow.up" : "arrow.down")
+                            Label("Sort", systemImage: "arrow.up")
+                                .rotationEffect(.degrees(sortButtonRotation))
                         }
                         Button(action: {
                             showFilterPopover.toggle()
