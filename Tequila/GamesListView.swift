@@ -214,12 +214,12 @@ struct GamesListView: View {
     @EnvironmentObject var favourites: Favourites
     
     @State private var searchText = ""
-    @State private var refreshButtonRotation = 0.0
     @State private var sortButtonRotation = 0.0
     @State private var titleSortAscending = true
     @State private var showFilterPopover = false
     @State private var showUpButton = false
     @State private var showNewGamePopover = false
+    @State private var filterButtonAnimate = false
     
     func filterGames() -> [Game] {
         return gamesList.games.filter { game in
@@ -288,20 +288,19 @@ struct GamesListView: View {
                     ToolbarItem(placement: .navigation) {
                         Button(action: {
                             model.refresh()
-                            withAnimation {
-                                refreshButtonRotation += 360
-                            }
                         }) {
                             Label("Refresh", systemImage: "arrow.clockwise")
-                                .rotationEffect(.degrees(refreshButtonRotation))
                         }
+                        .symbolEffect(.rotate.byLayer, options: .nonRepeating, value: model.refreshButtonCooldown)
+                        .disabled(model.refreshButtonCooldown)
                     }
                     ToolbarItemGroup(placement: .primaryAction) {
                         Button(action: {
                             showFilterPopover.toggle()
                         }) {
-                            Label("Filter", systemImage: "line.horizontal.3.decrease.circle")
+                            Label("Filter", systemImage: "line.horizontal.3.decrease")
                         }
+                        .symbolEffect(.bounce, value: showFilterPopover)
                         .popover(isPresented: $showFilterPopover, arrowEdge: .bottom) {
                             FilterView(model: model)
                         }
