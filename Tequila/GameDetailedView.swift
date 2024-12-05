@@ -272,14 +272,17 @@ struct GameDetailedView: View {
         }
         .onDisappear() {
             model.showRefreshButton = true
+            model.showAddGameButton = true
         }
         .onAppear {
             model.showRefreshButton = false
-            favourite = model.favourites.contains(game)
+            model.showAddGameButton = false
             
+            favourite = model.favourites.contains(game)
             model.webService.searchGiantBomb(query: game.title) { result in
                 if result.count > 0 {
                     giantBombGame = result[0]
+                    gameArtURL = giantBombGame!.image!.medium_url
                     
                     if giantBombGame!.name.lowercased() == game.title.lowercased() {
                         if giantBombGame!.description != nil {

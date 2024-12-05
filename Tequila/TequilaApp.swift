@@ -13,6 +13,7 @@ class ViewModel: ObservableObject {
     @Published var webService = WebService()
     @Published var cache = GamesCache()
     @Published var showRefreshButton = false
+    @Published var showAddGameButton = false
     @Published var refreshButtonCooldown = false
     @Published var compatibilityFilter = ""
     @Published var translationLayerFilter = ""
