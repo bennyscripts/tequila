@@ -246,11 +246,10 @@ struct GameDetailedView: View {
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button(action: {editGameRequestPopover.toggle()}) {
-                    Image(systemName: "pencil")
+                    Image(systemName: "square.and.pencil")
                         .foregroundColor(.secondary)
                 }
-                .buttonStyle(PlainButtonStyle())
-                .popover(isPresented: $editGameRequestPopover, arrowEdge: .top) {
+                .popover(isPresented: $editGameRequestPopover, arrowEdge: .bottom) {
                     EditGameView(model: model).environmentObject(game)
                 }
                 Button(action: {
