@@ -111,7 +111,7 @@ class Games: ObservableObject {
     }
 }
 
-struct GamesResponse: Decodable {
+class GameResponse: Decodable, ObservableObject {
     let response: [Game]
 }
 
@@ -119,15 +119,28 @@ class GameArtwork: Decodable, ObservableObject {
     let response: String
 }
 
-class Game: Decodable, ObservableObject, Identifiable, Encodable {
-    var title: String = ""
-    var compatibility: Compatibility = Compatibility(crossover: "Unknown", linux_arm: "Unknown", native: "Unknown", parallels: "Unknown", rosetta_2: "Unknown", wine: "Unknown")
+class Game: Decodable, Encodable, ObservableObject, Identifiable {
     var aliases: [String] = []
+    var compatibility: Compatibility = Compatibility(crossover: "Unknown", linux_arm: "Unknown", native: "Unknown", parallels: "Unknown", rosetta_2: "Unknown", wine: "Unknown")
+    var title: String = ""
     
-    init(title: String, compatibility: Compatibility, aliases: [String]) {
-        self.title = title
-        self.compatibility = compatibility
+    init(aliases: [String], compatibility: Compatibility, title: String) {
         self.aliases = aliases
+        self.compatibility = compatibility
+        self.title = title
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        aliases = try container.decode([String].self, forKey: .aliases)
+        compatibility = try container.decode(Compatibility.self, forKey: .compatibility)
+        title = try container.decode(String.self, forKey: .title)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case aliases
+        case compatibility
+        case title
     }
 }
 

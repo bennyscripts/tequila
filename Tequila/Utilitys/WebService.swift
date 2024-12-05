@@ -11,18 +11,28 @@ class WebService {
     let cache = GamesCache()
     
     func getGames(completion: @escaping ([Game]) -> ()) {
-        URLSession.shared.dataTask(with: URL(string: "https://benny.fun/api/mac-games")!) { data, response, error in
+        let url = URL(string: "https://benny.fun/api/mac-games")!
+        let headers = [
+            "User-Agent": "Tequila/1.0",
+            "Accept": "application/json",
+            "Host": "benny.fun"
+        ]
+        
+        var request = URLRequest(url: url, timeoutInterval: Double.infinity)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
-                let decoder = JSONDecoder()
-                if let gamesResponse = try? decoder.decode(GamesResponse.self, from: data) {
-                    DispatchQueue.main.async {
-                        completion(gamesResponse.response)
+                DispatchQueue.main.async {
+                    let decoder = JSONDecoder()
+                    do {
+                        let response = try decoder.decode(GameResponse.self, from: data)
+                        completion(response.response)
+                    } catch {
+                        print(error)
                     }
                 }
-            }
-            
-            if (error as? URLError)?.code == .timedOut {
-                print("Request timed out.")
             }
         }.resume()
     }
@@ -117,7 +127,7 @@ class WebService {
         }
         
         let game = Game(
-            title: title,
+            aliases: newAliases,
             compatibility: Compatibility(
                 crossover: crossover,
                 linux_arm: "Unknown",
@@ -126,7 +136,7 @@ class WebService {
                 rosetta_2: rosetta_2,
                 wine: "Unknown"
             ),
-            aliases: newAliases
+            title: title
         )
         
         let encoder = JSONEncoder()
@@ -153,7 +163,7 @@ class WebService {
         }
         
         let game = Game(
-            title: title,
+            aliases: newAliases,
             compatibility: Compatibility(
                 crossover: crossover,
                 linux_arm: "Unknown",
@@ -162,7 +172,7 @@ class WebService {
                 rosetta_2: rosetta_2,
                 wine: "Unknown"
             ),
-            aliases: newAliases
+            title: title
         )
         
 //        turn the game object into a json string
