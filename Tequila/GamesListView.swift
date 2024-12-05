@@ -97,10 +97,10 @@ struct FilterView: View {
             }
             .pickerStyle(MenuPickerStyle())
             
-            Button("Reset") {
-                model.translationLayerFilter = ""
-                model.compatibilityFilter = ""
-            }
+//            Button("Reset") {
+//                model.translationLayerFilter = ""
+//                model.compatibilityFilter = ""
+//            }
         }
         .padding()
     }
