@@ -118,29 +118,17 @@ struct NewGameView: View {
     @State private var aliases = ""
     @State private var showEmptyTitleWarning = false
     @State private var submitted = false
-    
-    @State private var checkmarkScale = 1.0
-    @State private var checkmarkOpacity = 0.0
-    @State private var submittedTextOpacity = 0.0
         
     var body: some View {
         if submitted {
-            ZStack {
-                Image(systemName: "checkmark")
-                    .font(.system(size: 50))
-                    .foregroundColor(.green)
-                    .opacity(checkmarkOpacity)
-                    .scaleEffect(checkmarkScale)
-                VStack {
-                    Text("Game Request Submitted")
-                        .font(.headline)
-                    Text("Thanks for contributing to Tequila!")
-                        .font(.subheadline)
-                }
-                .opacity(submittedTextOpacity)
+            VStack {
+                Text("Game Request Submitted")
+                    .font(.headline)
+                Text("Thanks for contributing to Tequila!")
+                    .font(.subheadline)
             }
-            .frame(width: submittedTextOpacity == 0 ? 120 : 300, height: submittedTextOpacity == 0 ? 120 : 0)
             .padding()
+            .frame(width: 300)
         } else {
             VStack {
                 HStack {
@@ -245,24 +233,6 @@ struct NewGameView: View {
                                 parallels = "N/A"
                                 aliases = ""
                                 submitted = true
-                                
-                                withAnimation {
-                                    checkmarkScale = 1.2
-                                    checkmarkOpacity = 1
-                                }
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                                    withAnimation {
-                                        checkmarkScale = 1
-                                    }
-                                }
-                                
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    withAnimation {
-                                        checkmarkOpacity = 0
-                                        submittedTextOpacity = 1
-                                    }
-                                }
                             }
                         }
                         .disabled(title.isEmpty)
