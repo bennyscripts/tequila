@@ -108,6 +108,8 @@ struct FilterView: View {
 
 struct NewGameView: View {
     @ObservedObject var model: ViewModel
+    @Binding var showSheet: Bool
+    
     @State private var title = ""
     @State private var native = "N/A"
     @State private var rosetta_2 = "N/A"
@@ -116,89 +118,166 @@ struct NewGameView: View {
     @State private var aliases = ""
     @State private var showEmptyTitleWarning = false
     @State private var submitted = false
+    
+    @State private var checkmarkScale = 1.0
+    @State private var checkmarkOpacity = 0.0
+    @State private var submittedTextOpacity = 0.0
         
     var body: some View {
         if submitted {
-            Text("Game request submitted! Game requests are added manually so you wont see immediate changes. You will be able to submit another request in \(model.gameRequestCooldownCurrentWaitTime) seconds...")
+            ZStack {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 50))
+                    .foregroundColor(.green)
+                    .opacity(checkmarkOpacity)
+                    .scaleEffect(checkmarkScale)
+                VStack {
+                    Text("Game Request Submitted")
+                        .font(.headline)
+                    Text("Thanks for contributing to Tequila!")
+                        .font(.subheadline)
+                }
+                .opacity(submittedTextOpacity)
+            }
+            .frame(width: submittedTextOpacity == 0 ? 120 : 300, height: submittedTextOpacity == 0 ? 120 : 0)
             .padding()
-            .frame(width: 300)
         } else {
-            Text("New Game Request")
-                .font(.title3)
-                .padding(.top)
-            VStack(alignment: .leading) {
+            VStack {
                 HStack {
-                    Text("Title:           ")
-                    TextField("Epic Game III", text: $title)
-                        .cornerRadius(7)
-                }
-                Picker("Native:        ", selection: $native) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                .padding(.top, 1)
-                Picker("Rosetta 2:   ", selection: $rosetta_2) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                Picker("CrossOver: ", selection: $crossover) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                Picker("Parallels:     ", selection: $parallels) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                .padding(.bottom, 2)
-                HStack {
-                    Text("Aliases:      ")
-                    TextField("Epic Game 3, Epic Game: The Trilogy", text: $aliases)
-                        .cornerRadius(7)
-                }
-                Text("Separate aliases with commas")
-                    .font(.caption)
-                    .padding(.bottom)
-                HStack {
-                    Button("Submit Request") {
-                        if title.isEmpty {
-                            showEmptyTitleWarning.toggle()
-                        } else {
-                            model.addGameRequest(title: title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
-                            title = ""
-                            native = "N/A"
-                            rosetta_2 = "N/A"
-                            crossover = "N/A"
-                            parallels = "N/A"
-                            aliases = ""
-                            submitted = true
-                        }
+                    Text("New Game Request")
+                    Spacer()
+                    Button(action: {
+                        showSheet.toggle()
+                    }) {
+                        Image(systemName: "xmark")
                     }
-                    .disabled(title.isEmpty)
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .padding()
+                .background(Color.gray.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 0)
+                        .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                )
+                
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Title")
+                        Spacer()
+                        TextField("Epic Game III", text: $title)
+                            .cornerRadius(7)
+                            .frame(width: 174)
+                    }
+                    HStack {
+                        Text("Native")
+                        Spacer()
+                        Picker("", selection: $native) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    .padding(.top, 1)
+                    HStack {
+                        Text("Rosetta 2")
+                        Spacer()
+                        Picker("", selection: $rosetta_2) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    HStack {
+                        Text("CrossOver")
+                        Spacer()
+                        Picker("", selection: $crossover) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    HStack {
+                        Text("Parallels")
+                        Spacer()
+                        Picker("", selection: $parallels) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    .padding(.bottom, 2)
+                    HStack {
+                        Text("Aliases")
+                        Spacer()
+                        TextField("Epic Game 3, Epic Game: The Trilogy", text: $aliases)
+                            .cornerRadius(7)
+                            .frame(width: 174)
+                    }
+                    Text("Separate aliases with commas")
+                        .font(.caption)
+                        .padding(.bottom)
+                    HStack {
+                        Button("Submit Request") {
+                            if title.isEmpty {
+                                showEmptyTitleWarning.toggle()
+                            } else {
+                                model.addGameRequest(title: title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
+                                title = ""
+                                native = "N/A"
+                                rosetta_2 = "N/A"
+                                crossover = "N/A"
+                                parallels = "N/A"
+                                aliases = ""
+                                submitted = true
+                                
+                                withAnimation {
+                                    checkmarkScale = 1.2
+                                    checkmarkOpacity = 1
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    withAnimation {
+                                        checkmarkScale = 1
+                                    }
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    withAnimation {
+                                        checkmarkOpacity = 0
+                                        submittedTextOpacity = 1
+                                    }
+                                }
+                            }
+                        }
+                        .disabled(title.isEmpty)
+                    }
+                }
+                .padding(.top, 10)
+                .padding(.bottom)
+                .padding(.horizontal)
+                .onAppear() {
+                    if model.gameRequestCooldown {
+                        submitted = true
+                    }
                 }
             }
-            .padding()
             .frame(width: 300)
-            .onAppear() {
-                if model.gameRequestCooldown {
-                    submitted = true
-                }
-            }
         }
     }
 }
@@ -215,6 +294,7 @@ struct GamesListView: View {
     @State private var showUpButton = false
     @State private var showNewGamePopover = false
     @State private var filterButtonAnimate = false
+    @State private var showRequestCooldownPopover = false
     
     func filterGames() -> [Game] {
         return gamesList.games.filter { game in
@@ -313,8 +393,24 @@ struct GamesListView: View {
                         }) {
                             Label("New Game", systemImage: "plus")
                         }
-                        .popover(isPresented: $showNewGamePopover, arrowEdge: .bottom) {
-                            NewGameView(model: model)
+                        .disabled(model.gameRequestCooldown)
+                        .sheet(isPresented: $showNewGamePopover) {
+                            NewGameView(model: model, showSheet: $showNewGamePopover)
+                        }
+                        .onHover { hovering in
+                            if model.gameRequestCooldown {
+                                if hovering {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        showRequestCooldownPopover = true
+                                    }
+                                } else {
+                                    showRequestCooldownPopover = false
+                                }
+                            }
+                        }
+                        .popover(isPresented: $showRequestCooldownPopover, arrowEdge: .leading) {
+                            Text("Cooldown active! Please don't spam my API 🙏")
+                                .padding()
                         }
                     }
                 }

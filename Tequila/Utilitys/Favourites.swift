@@ -66,6 +66,8 @@ class Favourites: ObservableObject {
     func add(_ game: Game) {
         if self.favourites.count >= limit {
             return
+        } else if self.favourites.contains(game.title) {
+            return
         }
         self.favourites.append(game.title)
         return save()

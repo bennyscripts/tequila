@@ -23,6 +23,7 @@ struct CompatibilityDetailedView: View {
 struct EditGameView: View {
     @ObservedObject var model: ViewModel
     @EnvironmentObject var game: Game
+    @Binding var showSheet: Bool
     
     @State private var native = "N/A"
     @State private var rosetta_2 = "N/A"
@@ -31,86 +32,159 @@ struct EditGameView: View {
     @State private var aliases = ""
     @State private var submitted = false
         
+    @State private var checkmarkScale = 1.0
+    @State private var checkmarkOpacity = 0.0
+    @State private var submittedTextOpacity = 0.0
+    
     var body: some View {
         if submitted {
-            Text("Game edit request submitted! Your request is checked and finalised manually, you wont see immediate effect. You will be able to submit another request in \(model.gameRequestCooldownCurrentWaitTime) seconds...")
+            ZStack {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 50))
+                    .foregroundColor(.green)
+                    .opacity(checkmarkOpacity)
+                    .scaleEffect(checkmarkScale)
+                VStack {
+                    Text("Edit Game Request Submitted")
+                        .font(.headline)
+                    Text("Thanks for contributing to Tequila!")
+                        .font(.subheadline)
+                }
+                .opacity(submittedTextOpacity)
+            }
+            .frame(width: submittedTextOpacity == 0 ? 120 : 300, height: submittedTextOpacity == 0 ? 120 : 0)
             .padding()
-            .frame(width: 300)
         } else {
-            Text("Edit Game Request")
-                .font(.title3)
-                .padding(.top)
-            VStack(alignment: .leading) {
-                Picker("Native:        ", selection: $native) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                .padding(.top, 1)
-                Picker("Rosetta 2:   ", selection: $rosetta_2) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                Picker("CrossOver: ", selection: $crossover) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                Picker("Parallels:     ", selection: $parallels) {
-                    Text("N/A").tag("N/A")
-                    Text("Unknown").tag("Unknown")
-                    Text("Menu").tag("Menu")
-                    Text("Runs").tag("Runs")
-                    Text("Playable").tag("Playable")
-                    Text("Perfect").tag("Perfect")
-                }
-                .padding(.bottom, 2)
+            VStack {
                 HStack {
-                    Text("Aliases:      ")
-                    TextField("Epic Game 3, Epic Game: The Trilogy", text: $aliases)
-                        .cornerRadius(7)
-                }
-                Text("Separate aliases with commas")
-                    .font(.caption)
-                    .padding(.bottom)
-                HStack {
-                    Button("Submit Request") {
-                        if native != game.compatibility.native || rosetta_2 != game.compatibility.rosetta_2 || crossover != game.compatibility.crossover || parallels != game.compatibility.parallels || aliases != game.aliases.joined(separator: ", ") {
-                            model.editGameRequest(title: game.title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
-                            native = game.compatibility.native
-                            rosetta_2 = game.compatibility.rosetta_2
-                            crossover = game.compatibility.crossover
-                            parallels = game.compatibility.parallels
-                            aliases = game.aliases.joined(separator: ", ")
-                            submitted = true
-                        }
+                    Text("Edit Game Request")
+                    Spacer()
+                    Button(action: {
+                        showSheet.toggle()
+                    }) {
+                        Image(systemName: "xmark")
                     }
-                    .disabled(native == game.compatibility.native && rosetta_2 == game.compatibility.rosetta_2 && crossover == game.compatibility.crossover && parallels == game.compatibility.parallels && aliases == game.aliases.joined(separator: ", "))
+                    .buttonStyle(PlainButtonStyle())
+                }
+                .padding()
+                .background(Color.gray.opacity(0.05))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 0)
+                        .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                )
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Native")
+                        Spacer()
+                        Picker("", selection: $native) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    HStack {
+                        Text("Rosetta 2")
+                        Spacer()
+                        Picker("", selection: $rosetta_2) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    HStack {
+                        Text("CrossOver")
+                        Spacer()
+                        Picker("", selection: $crossover) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    HStack {
+                        Text("Parallels")
+                        Spacer()
+                        Picker("", selection: $parallels) {
+                            Text("N/A").tag("N/A")
+                            Text("Unknown").tag("Unknown")
+                            Text("Menu").tag("Menu")
+                            Text("Runs").tag("Runs")
+                            Text("Playable").tag("Playable")
+                            Text("Perfect").tag("Perfect")
+                        }
+                        .frame(width: 180)
+                    }
+                    .padding(.bottom, 2)
+                    HStack {
+                        Text("Aliases")
+                        Spacer()
+                        TextField("Epic Game 3, Epic Game: The Trilogy", text: $aliases)
+                            .cornerRadius(7)
+                            .frame(width: 174)
+                    }
+                    Text("Separate aliases with commas")
+                        .font(.caption)
+                        .padding(.bottom)
+                    HStack {
+                        Button("Submit Request") {
+                            if native != game.compatibility.native || rosetta_2 != game.compatibility.rosetta_2 || crossover != game.compatibility.crossover || parallels != game.compatibility.parallels || aliases != game.aliases.joined(separator: ", ") {
+                                model.editGameRequest(title: game.title, native: native, rosetta_2: rosetta_2, crossover: crossover, parallels: parallels, aliases: aliases)
+                                native = game.compatibility.native
+                                rosetta_2 = game.compatibility.rosetta_2
+                                crossover = game.compatibility.crossover
+                                parallels = game.compatibility.parallels
+                                aliases = game.aliases.joined(separator: ", ")
+                                submitted = true
+                                
+                                withAnimation {
+                                    checkmarkScale = 1.2
+                                    checkmarkOpacity = 1
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                                    withAnimation {
+                                        checkmarkScale = 1
+                                    }
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    withAnimation {
+                                        checkmarkOpacity = 0
+                                        submittedTextOpacity = 1
+                                    }
+                                }
+                            }
+                        }
+                        .disabled(native == game.compatibility.native && rosetta_2 == game.compatibility.rosetta_2 && crossover == game.compatibility.crossover && parallels == game.compatibility.parallels && aliases == game.aliases.joined(separator: ", "))
+                    }
+                }
+                .padding(.top, 10)
+                .padding(.bottom)
+                .padding(.horizontal)
+                .onAppear() {
+                    native = game.compatibility.native
+                    rosetta_2 = game.compatibility.rosetta_2
+                    crossover = game.compatibility.crossover
+                    parallels = game.compatibility.parallels
+                    aliases = game.aliases.joined(separator: ", ")
+                    
+                    if model.gameRequestCooldown {
+                        submitted = true
+                    }
                 }
             }
-            .padding()
             .frame(width: 300)
-            .onAppear() {
-                native = game.compatibility.native
-                rosetta_2 = game.compatibility.rosetta_2
-                crossover = game.compatibility.crossover
-                parallels = game.compatibility.parallels
-                aliases = game.aliases.joined(separator: ", ")
-                
-                if model.gameRequestCooldown {
-                    submitted = true
-                }
-            }
         }
     }
 }
@@ -130,6 +204,7 @@ struct GameDetailedView: View {
     @State var crossoverPopover = false
     @State var parallelsPopover = false
     @State var editGameRequestPopover = false
+    @State var showRequestCooldownPopover = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -247,10 +322,25 @@ struct GameDetailedView: View {
             ToolbarItemGroup(placement: .primaryAction) {
                 Button(action: {editGameRequestPopover.toggle()}) {
                     Image(systemName: "square.and.pencil")
-                        .foregroundColor(.secondary)
                 }
-                .popover(isPresented: $editGameRequestPopover, arrowEdge: .bottom) {
-                    EditGameView(model: model).environmentObject(game)
+                .disabled(model.gameRequestCooldown)
+                .sheet(isPresented: $editGameRequestPopover) {
+                    EditGameView(model: model, showSheet: $editGameRequestPopover).environmentObject(game)
+                }
+                .onHover { hovering in
+                    if model.gameRequestCooldown {
+                        if hovering {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                showRequestCooldownPopover = true
+                            }
+                        } else {
+                            showRequestCooldownPopover = false
+                        }
+                    }
+                }
+                .popover(isPresented: $showRequestCooldownPopover, arrowEdge: .leading) {
+                    Text("Cooldown active! Please don't spam my API 🙏")
+                        .padding()
                 }
                 Button(action: {
                     if model.favourites.hitLimit() {
@@ -258,15 +348,21 @@ struct GameDetailedView: View {
                     } else {
                         favourite.toggle()
                         
-                        if favourite && !model.favourites.contains(game) {
+                        if favourite {
                             model.favourites.add(game)
-                        } else if !favourite && model.favourites.contains(game) {
+                        } else {
                             model.favourites.remove(game)
                         }
                     }
                 }) {
                     Image(systemName: favourite ? "star.fill" : "star")
-                        .foregroundColor(favourite ? .yellow : .secondary)
+                        .overlay {
+                            if favourite {
+                                Image(systemName: "star.fill")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.yellow)
+                            }
+                        }
                 }
             }
         }
@@ -312,9 +408,6 @@ struct GameDetailedView: View {
                     }
                 }
             }
-        }
-        .onDisappear {
-            model.updateView()
         }
     }
 }
