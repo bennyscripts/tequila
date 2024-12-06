@@ -27,6 +27,7 @@ struct FilterPopover: View {
                 Text("Unknown").tag("unknown")
                 Text("Menu").tag("menu")
                 Text("Runs").tag("runs")
+                Text("Unplayable").tag("Unplayable")
                 Text("Playable").tag("playable")
                 Text("Perfect").tag("perfect")
             }

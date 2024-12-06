@@ -56,6 +56,7 @@ struct EditGameRequestSheet: View {
                             Text("Unknown").tag("Unknown")
                             Text("Menu").tag("Menu")
                             Text("Runs").tag("Runs")
+                            Text("Unplayable").tag("Unplayable")
                             Text("Playable").tag("Playable")
                             Text("Perfect").tag("Perfect")
                         }
@@ -69,6 +70,7 @@ struct EditGameRequestSheet: View {
                             Text("Unknown").tag("Unknown")
                             Text("Menu").tag("Menu")
                             Text("Runs").tag("Runs")
+                            Text("Unplayable").tag("Unplayable")
                             Text("Playable").tag("Playable")
                             Text("Perfect").tag("Perfect")
                         }
@@ -82,6 +84,7 @@ struct EditGameRequestSheet: View {
                             Text("Unknown").tag("Unknown")
                             Text("Menu").tag("Menu")
                             Text("Runs").tag("Runs")
+                            Text("Unplayable").tag("Unplayable")
                             Text("Playable").tag("Playable")
                             Text("Perfect").tag("Perfect")
                         }
@@ -95,6 +98,7 @@ struct EditGameRequestSheet: View {
                             Text("Unknown").tag("Unknown")
                             Text("Menu").tag("Menu")
                             Text("Runs").tag("Runs")
+                            Text("Unplayable").tag("Unplayable")
                             Text("Playable").tag("Playable")
                             Text("Perfect").tag("Perfect")
                         }
