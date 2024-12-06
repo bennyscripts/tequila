@@ -10,7 +10,6 @@ import SwiftSoup
 
 struct GameDetailedView: View {
     @EnvironmentObject var game: Game
-//    @EnvironmentObject var favourites: Favourites
     @ObservedObject var model: ViewModel
     var from: String
     @State var gameArtURL: String = "https://placehold.co/225x300.jpg"

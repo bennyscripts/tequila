@@ -41,7 +41,6 @@ struct GameCard: View {
                         axis: (x: 0.0, y: 1.0, z: 0.0)
                     )
                     .clipped()
-//                    .background(Color.white.padding(-30))
                     .blur(radius: CGFloat(imageBlur))
             } placeholder: {
                 ProgressView()
