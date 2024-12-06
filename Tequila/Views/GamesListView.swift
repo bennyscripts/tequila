@@ -16,7 +16,6 @@ struct GamesListView: View {
     @State private var sortButtonRotation = 0.0
     @State private var titleSortAscending = true
     @State private var showFilterPopover = false
-    @State private var showUpButton = false
     @State private var showNewGamePopover = false
     @State private var filterButtonAnimate = false
     @State private var showRequestCooldownPopover = false
@@ -56,29 +55,6 @@ struct GamesListView: View {
                         }
                         .searchable(text: $searchText)
                         .background(Color.clear)
-                        
-                        if showUpButton {
-                            VStack {
-                                Spacer()
-                                HStack {
-                                    Spacer()
-                                    Button(action: {
-                                        withAnimation {
-                                            proxy.scrollTo(filterGames().first?.title)
-                                        }
-                                    }) {
-                                        Image(systemName: "arrow.up")
-                                            .padding()
-                                            .background(Color.secondary.opacity(1))
-                                            .cornerRadius(10)
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                    .padding(.bottom)
-                                    .padding(.trailing, 30)
-                                    .shadow(radius: 5, y: 5)
-                                }
-                            }
-                        }
                     }
                 }
             }
