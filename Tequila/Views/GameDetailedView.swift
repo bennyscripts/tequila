@@ -9,9 +9,9 @@ import SwiftUI
 import SwiftSoup
 
 struct GameDetailedView: View {
-    @EnvironmentObject var game: Game
     @ObservedObject var model: ViewModel
-    var from: String
+    @EnvironmentObject var game: Game
+    
     @State var gameArtURL: String = "https://placehold.co/225x300.jpg"
     @State var giantBombGame: GiantBombGame? = nil
     @State var gameDescription: String = "No description found..."
@@ -132,9 +132,7 @@ struct GameDetailedView: View {
                 }
             }
         }
-        .padding(.top)
-        .padding(.horizontal)
-        .padding(.bottom, from.localizedCaseInsensitiveContains("GamesListView") ? 16 : 0)
+        .padding()
         .navigationTitle(game.title)
         .toolbar {
             ToolbarItemGroup(placement: .primaryAction) {

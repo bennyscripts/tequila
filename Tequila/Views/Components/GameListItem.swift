@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct GameListItem: View {
-    @EnvironmentObject var game: Game
     @ObservedObject var model: ViewModel
+    @EnvironmentObject var game: Game
     @State private var favourite = false
     @State private var backgroundOpacity = 0.0
     

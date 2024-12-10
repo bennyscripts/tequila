@@ -12,13 +12,13 @@ struct GamesListView: View {
     @EnvironmentObject var gamesList: Games
     @EnvironmentObject var favourites: Favourites
     
-    @State private var searchText = ""
-    @State private var sortButtonRotation = 0.0
-    @State private var titleSortAscending = true
-    @State private var showFilterPopover = false
-    @State private var showUpButton = false
-    @State private var showNewGamePopover = false
-    @State private var filterButtonAnimate = false
+    @State var searchText = ""
+    @State var sortButtonRotation = 0.0
+    @State var titleSortAscending = true
+    @State var showFilterPopover = false
+    @State var showUpButton = false
+    @State var showNewGamePopover = false
+    @State var filterButtonAnimate = false
     
     func filterGames() -> [Game] {
         return gamesList.games.filter { game in
@@ -47,8 +47,9 @@ struct GamesListView: View {
                 ScrollViewReader { proxy in
                     ZStack {
                         List(filterGames(), id: \.title) { game in
-                            NavigationLink(destination: GameDetailedView(model: model, game: game)) {
-                                GameListItem(model: model, game: game)
+                            NavigationLink(destination: GameDetailedView(model: model).environmentObject(game)) {
+                                GameListItem(model: model)
+                                    .environmentObject(game)
                             }
                             .buttonStyle(PlainButtonStyle())
                         }

@@ -12,12 +12,12 @@ struct EditGameRequestSheet: View {
     @EnvironmentObject var game: Game
     @Binding var showSheet: Bool
     
-    @State private var native = "N/A"
-    @State private var rosetta_2 = "N/A"
-    @State private var crossover = "N/A"
-    @State private var parallels = "N/A"
-    @State private var aliases = ""
-    @State private var submitted = false
+    @State var native = "N/A"
+    @State var rosetta_2 = "N/A"
+    @State var crossover = "N/A"
+    @State var parallels = "N/A"
+    @State var aliases = ""
+    @State var submitted = false
     
     var body: some View {
         if submitted {
