@@ -16,9 +16,9 @@ struct GamesListView: View {
     @State private var sortButtonRotation = 0.0
     @State private var titleSortAscending = true
     @State private var showFilterPopover = false
+    @State private var showUpButton = false
     @State private var showNewGamePopover = false
     @State private var filterButtonAnimate = false
-    @State private var showRequestCooldownPopover = false
     
     func filterGames() -> [Game] {
         return gamesList.games.filter { game in
@@ -47,14 +47,36 @@ struct GamesListView: View {
                 ScrollViewReader { proxy in
                     ZStack {
                         List(filterGames(), id: \.title) { game in
-                            NavigationLink(destination: GameDetailedView(model: model, from: "GamesListView").environmentObject(game)) {
-                                GameListItem(model: model)
-                                    .environmentObject(game)
+                            NavigationLink(destination: GameDetailedView(model: model, game: game)) {
+                                GameListItem(model: model, game: game)
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
                         .searchable(text: $searchText)
                         .background(Color.clear)
+                        
+                        if showUpButton {
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                    Button(action: {
+                                        withAnimation {
+                                            proxy.scrollTo(filterGames().first?.title)
+                                        }
+                                    }) {
+                                        Image(systemName: "arrow.up")
+                                            .padding()
+                                            .background(Color.secondary.opacity(1))
+                                            .cornerRadius(10)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .padding(.bottom)
+                                    .padding(.trailing, 30)
+                                    .shadow(radius: 5, y: 5)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -94,24 +116,8 @@ struct GamesListView: View {
                         }) {
                             Label("New Game", systemImage: "plus")
                         }
-                        .disabled(model.gameRequestCooldown)
                         .sheet(isPresented: $showNewGamePopover) {
                             NewGameRequestSheet(model: model, showSheet: $showNewGamePopover)
-                        }
-                        .onHover { hovering in
-                            if model.gameRequestCooldown {
-                                if hovering {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        showRequestCooldownPopover = true
-                                    }
-                                } else {
-                                    showRequestCooldownPopover = false
-                                }
-                            }
-                        }
-                        .popover(isPresented: $showRequestCooldownPopover, arrowEdge: .leading) {
-                            Text("Cooldown active! Please don't spam my API 🙏")
-                                .padding()
                         }
                     }
                 }
